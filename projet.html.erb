@@ -17,18 +17,44 @@
         </form>
 
 
+        <% result = connection.exec("select weight, give_for from crops;") %>
+        <% data = [] %>
+
+        <% result.each do |record| %>
+        <%  data << "La taille de la courge amère：#{record["weight"]}　Qui a vendu ：#{record["give_for"]}" %>
+        <% end %>
+
+          <form action="goya.cgi" method="POST">
+        Press the button below to jump to the information page of the size of bitter gourd and the person who sold it.<br><br>
+            <input type="text" name="goya" value="<%= data.join(' ') %>">
+            <input type="submit" name="Send">
+          </form>
+
         <% result = connection.exec("select give_for from crops WHERE NOT give_for = 'consommation personnelle';") %>
         <% data = [] %>
 
         <% result.each do |record| %>
-        <% data << "-----：#{record["give_for"]}" %>
+        <% data << "Vendu a：#{record["give_for"]}" %>
         <% end %>
 
-          <form action="goya.cgi" method="POST">
+          <form action="donne.cgi" method="POST">
     Appuyez sur le bouton ci-dessous pour passer à la page d'information sur la taille de la gourde amère et la personne qui l'a vendue.<br><br>
-            <input type="text" name="goya" value="<%= data.join(' ') %>"><br><br>
+            <input type="text" name="donne" value="<%= data.join(' ') %>"><br><br>
             <input type="submit" name="Envoyer">
           </form>
 
+          <% result = connection.exec("select quality from crops WHERE quality = false;") %>
+          <% data = [] %>
+
+          <% result.each do |record| %>
+          <% data << "Qualité：#{record["quality"]}" %>
+          <% end %>
+
+            <form action="qualite.cgi" method="POST">
+      Cliquer sur le bouton ci-dessous pour accéder à la page d'information sur les produits de mauvaise qualité.<br><br>
+              <input type="text" name="qualite" value="<%= data.join(' ') %>"><br><br>
+              <input type="submit" name="Envoyer">
+            </form>
+            <h1>Ceci est la version final de mon exercice: Application CGI</h1>
   </body>
 </html>
